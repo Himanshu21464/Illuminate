@@ -21,7 +21,7 @@ CREATE TABLE Employee (
   Login_Password VARCHAR(20) NOT NULL,
   Date_of_Birth DATE NOT NULL,
   Gender ENUM('Male', 'Female','Other') NOT NULL,
-  Age INT NOT NULL,
+  Age INT NOT NULL DEFAULT 0,
   House_Number INT NOT NULL,
   Locality VARCHAR(20) NOT NULL,
   City VARCHAR(15) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE Employee (
   Pincode INT NOT NULL,
   Employee_Role VARCHAR(30) NOT NULL,
   Date_of_Hiring DATE NOT NULL,
-  Time_in_Company INT NOT NULL,
+  Time_in_Company INT NOT NULL DEFAULT 0,
   PAN VARCHAR(15) NOT NULL UNIQUE,
   Blood_Group ENUM("A+", "B+", "O+", "AB+", "A-", "B-", "O-", "AB-"),
   Emergency_Contact_Number BIGINT NOT NULL,
@@ -51,6 +51,11 @@ CREATE TABLE Employee_Mobile_Numbers (
   
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+UPDATE Employee
+SET Age = DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), Date_of_Birth)), '%Y') + 0;
+
+UPDATE Employee
+SET Time_in_Company = DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), Date_of_Hiring)), '%Y') + 0;
 --
 -- View table for Employee.
 --
@@ -75,7 +80,7 @@ CREATE TABLE Customer (
   Login_Password VARCHAR(20) NOT NULL,
   Date_of_Birth DATE NOT NULL,
   Gender ENUM('Male', 'Female','Other') NOT NULL,
-  Age INT NOT NULL,
+  Age INT NOT NULL DEFAULT 0,
   House_Number INT NOT NULL,
   Locality VARCHAR(20) NOT NULL,
   City VARCHAR(15) NOT NULL,
@@ -96,6 +101,9 @@ CREATE TABLE Customer_Mobile_Numbers (
   CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$')
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+UPDATE Customer
+SET Age = DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(), Date_of_Birth)), '%Y') + 0;
 --
 -- View for Customer_Details
 --

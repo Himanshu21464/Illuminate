@@ -205,6 +205,18 @@ CREATE TABLE Review (
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DELIMITER $$
+
+CREATE TRIGGER tr_review_insert
+BEFORE INSERT ON Review
+FOR EACH ROW
+BEGIN
+  SET NEW.Review_Date = CURDATE();
+END$$
+
+DELIMITER ;
+
+
 --
 -- Table structure for table `Brand`
 --

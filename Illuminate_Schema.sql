@@ -296,6 +296,35 @@ CREATE TABLE Customer_Transaction (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+CREATE INDEX idx_Employee_First_name ON Employee (First_Name);
+CREATE INDEX idx_Employee_Last_name ON Employee (Last_Name);
+CREATE INDEX idx_Employee_Salary ON Employee (Salary);
+CREATE INDEX idx_Employee_Age ON Employee (Age);
+CREATE INDEX idx_Employee_Experience ON Employee (Time_in_Company);
+CREATE INDEX idx_Employee_Blood ON Employee (Blood_Group);
+
+CREATE INDEX idx_Customer_First_name ON Customer (First_Name);
+CREATE INDEX idx_Customer_Last_name ON Customer (Last_Name);
+CREATE INDEX idx_Customer_Age ON Customer (Age);
+
+CREATE INDEX idx_Seller_First_name ON Customer (First_Name);
+CREATE INDEX idx_Seller_Last_name ON Customer (Last_Name);
+
+CREATE INDEX idx_Brand_Name ON Brand (Brand_Name);
+
+CREATE INDEX idx_Courier_Name ON Courier (Courier_Name);
+
+CREATE INDEX idx_Category_Name ON Category (CategoryName);
+
+CREATE INDEX idx_Transaction_Date ON Customer_Transaction (Transaction_Date);
+
+CREATE INDEX idx_Customer_Order_Date ON Customer_Orders (Order_Date);
+
+CREATE INDEX idx_Order_Delivery_Date ON Customer_Orders (Delivery_Date);
+
+CREATE INDEX idx_Order_Review_Rating ON Review (Review_Rating);
+
+
 
 
 

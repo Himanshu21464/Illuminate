@@ -1,7 +1,4 @@
--- SQL Script to create Database Schema for Illuminate
--- How to enter Multivalued attributes
--- Adding derived attributes (age, time in company)
--- Adding more constraints
+-- Handle Weak Entity
 
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
@@ -22,30 +19,28 @@ CREATE TABLE Employee (
   Middle_Name VARCHAR(45),
   Last_Name VARCHAR(45) NOT NULL,
   Email VARCHAR(45) UNIQUE,
-  Login_Password VARCHAR(20) NOT ,
-  Mobile_Number VARCHAR(10) NOT NULL UNIQUE ,
+  Login_Password VARCHAR(20) NOT NULL,
+  Mobile_Number VARCHAR(550) NOT NULL ,
   Date_Of_Birth DATE NOT NULL,
-  Gender VARCHAR(6) CHECK (Gender = "Male" OR Gender = "Female" OR "Gender"),
-  AGE INT NOT NULL,
+  Gender ENUM("Male", "Female", "Other"),
   House_Number INT NOT NULL,
   Locality VARCHAR(20) NOT NULL,
   City VARCHAR(15) NOT NULL,
-  State VARCHAR(15) NOT NULL,
+  State_ VARCHAR(15) NOT NULL,
   Country VARCHAR(15) NOT NULL,
   Pincode INT NOT NULL,
   Employee_Role VARCHAR(30) NOT NULL,
   Date_of_Hiring DATE NOT NULL,
-  Time_in_company INT,
   PAN VARCHAR(15) NOT NULL,
-  Blood_Group VARCHAR(3),
+  Blood_Group ENUM("A+", "B+", "O+", "AB+", "A-", "B-", "O-", "AB-"),
   Emergency_Contact_Number BIGINT NOT NULL,
   Emergency_Contact_Name VARCHAR(20) NOT NULL,
   Salary FLOAT NOT NULL,
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   -- KEY idx_actor_last_name (last_name)
   -- Constraints
-  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number like '[7-9][0-9]{9}') 
-
+  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$'),
+  CONSTRAINT Check_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\\.[a-zA-Z]{2,4}$')
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -59,17 +54,18 @@ CREATE TABLE Customer (
   Last_Name VARCHAR(45) NOT NULL,
   Email VARCHAR(45) UNIQUE,
   Login_Password VARCHAR(20) NOT NULL,
-  Mobile_Number BIGINT NOT NULL UNIQUE,
+  Mobile_Number VARCHAR(550) NOT NULL ,
   Date_Of_Birth DATE NOT NULL,
-  Gender VARCHAR(6) CHECK (Gender = "Male" OR Gender = "Female" OR "Gender"),
-  AGE INT NOT NULL,
+  Gender ENUM("Male", "Female", "Other"),
   House_Number INT NOT NULL,
   Locality VARCHAR(20) NOT NULL,
   City VARCHAR(15) NOT NULL,
-  State VARCHAR(15) NOT NULL,
+  State_ VARCHAR(15) NOT NULL,
   Country VARCHAR(15) NOT NULL,
   Pincode INT NOT NULL,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$'),
+  CONSTRAINT Check_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\\.[a-zA-Z]{2,4}$')
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -84,16 +80,17 @@ CREATE TABLE Seller (
   Last_Name VARCHAR(45) NOT NULL,
   Email VARCHAR(45) UNIQUE,
   Login_Password VARCHAR(20) NOT NULL,
-  Mobile_Number BIGINT NOT NULL UNIQUE,
+  Mobile_Number VARCHAR(550) NOT NULL ,
   Company_Name VARCHAR(40) NOT NULL,
   Property_Number INT NOT NULL,
   Locality VARCHAR(20) NOT NULL,
   City VARCHAR(15) NOT NULL,
-  State VARCHAR(15) NOT NULL,
+  State_ VARCHAR(15) NOT NULL,
   Country VARCHAR(15) NOT NULL,
   Pincode INT NOT NULL,
- 
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$'),
+  CONSTRAINT Check_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\\.[a-zA-Z]{2,4}$')
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -109,8 +106,14 @@ CREATE TABLE Product (
   Product_Quantity INT NOT NULL,
   Product_Images VARCHAR(150) NOT NULL,
   Product_Ingredients VARCHAR(100) NOT NULL,
+  CATEGORY_ID VARCHAR(36),
+  BRAND_ID VARCHAR(36),
+  SELLER_ID VARCHAR(36),
+  FOREIGN KEY (BRAND_ID) REFERENCES BRAND(ID),
+  FOREIGN KEY (CATEGORY_ID) REFERENCES CATEGORY(ID),
+  FOREIGN KEY (SELLER_ID) REFERENCES SELLER(ID),
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
   
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -118,12 +121,12 @@ CREATE TABLE Product (
 -- Table structure for table `Product Category`
 --
 
-CREATE TABLE Product_Category (
+CREATE TABLE Category(
   ID VARCHAR(36) PRIMARY KEY,
-  Category_Name VARCHAR(45) NOT NULL,
-  Category_Description VARCHAR(100) NOT NULL,
+  CategoryName VARCHAR(45) NOT NULL,
+  CategoryDescription VARCHAR(100) NOT NULL,
  
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -137,7 +140,12 @@ CREATE TABLE Review (
   Review_Title VARCHAR(100) NOT NULL,
   Comments VARCHAR(200),
   Review_Date DATE NOT NULL,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Product_ID VARCHAR(36),
+  Customer_ID VARCHAR(36),
+  FOREIGN KEY (Product_ID) REFERENCES Product(ID),
+  FOREIGN KEY (Customer_ID) REFERENCES Customer(ID),
+  -- @TODO: Constraint for rating
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -152,7 +160,7 @@ CREATE TABLE Brand (
   Brand_Logo VARCHAR(200) NOT NULL UNIQUE,
   Founder VARCHAR(50) NOT NULL,
   Country_Of_Origin VARCHAR(50) NOT NULL,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
@@ -162,9 +170,13 @@ CREATE TABLE Brand (
 CREATE TABLE Cart (
   ID VARCHAR(36) PRIMARY KEY,
   Quantity INT NOT NULL,
-  Total_Amount FLOAT NOT NULL,
-  Discount FLOAT, 
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Discount FLOAT,
+  Product_ID VARCHAR(36),
+  Customer_ID VARCHAR(36),
+  FOREIGN KEY (Product_ID) REFERENCES Product(ID),
+  FOREIGN KEY (Customer_ID) REFERENCES Customer(ID),
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
@@ -173,7 +185,11 @@ CREATE TABLE Cart (
 
 CREATE TABLE Wishlist (
   ID VARCHAR(36) PRIMARY KEY,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Product_ID VARCHAR(36),
+  Customer_ID VARCHAR(36),
+  FOREIGN KEY (Product_ID) REFERENCES Product(ID),
+  FOREIGN KEY (Customer_ID) REFERENCES Customer(ID),
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -181,14 +197,16 @@ CREATE TABLE Wishlist (
 -- Table structure for table `Order`
 --
 
-CREATE TABLE Customer_Orders (
+CREATE TABLE Orders (
   ID VARCHAR(36) PRIMARY KEY,
   Order_Date DATE NOT NULL,
   Amount FLOAT NOT NULL,
-  Order_Status VARCHAR(20) CHECK (Order_Status = "Delivered" OR Order_Status = "Under Process" ),
+  Order_Status ENUM("Delivered","Under Process"),
   Delivery_Date DATE NOT NULL,
   Delivery_Fee FLOAT NOT NULL,  
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Customer_ID VARCHAR(36),
+  FOREIGN KEY (Customer_ID) REFERENCES Customer(ID),
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -197,10 +215,12 @@ CREATE TABLE Customer_Orders (
 --
 
 CREATE TABLE Courier (
-  Tracking_ID INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  Tracking_ID INT UNSIGNED NOT NULL UNIQUE,
   Courier_Name VARCHAR(50) NOT NULL,
   Tracking_URL VARCHAR(200) NOT NULL,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Order_ID VARCHAR(36),
+  FOREIGN KEY (Order_ID) REFERENCES Orders(ID),
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -212,10 +232,11 @@ CREATE TABLE Customer_Transaction (
   ID VARCHAR(36) PRIMARY KEY,
   Transaction_Date DATE NOT NULL,
   Amount FLOAT NOT NULL,
-  Transaction_Status VARCHAR(20) CHECK (Transaction_Status = "Successful" OR Transaction_Status = "Pending" OR Transaction_Status = "Failed"),
-  Payment_Offers VARCHAR(50),
-  Payment_Method VARCHAR(30) CHECK (Payment_Method = "Credit/Debit Card" OR Payment_Method = "Netbanking" OR Payment_Method = "UPI" OR Payment_Method = "Cash On Delivery" OR Payment_Method = "Pay Later"), 
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  Transaction_Status ENUM ("Successful", "Pending", "Failed"),
+  Payment_Method ENUM ("Credit/Debit Card", "Netbanking", "UPI", "Cash On Delivery", "Pay Later"), 
+  Order_ID VARCHAR(36),
+  FOREIGN KEY (Order_ID) REFERENCES Orders(ID),
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -4437,12 +4437,6 @@ insert into Wishlist (ID, Product_ID, Customer_ID) values ('35c03446-3c74-45c2-b
 insert into Wishlist (ID, Product_ID, Customer_ID) values ('96117217-1128-4330-8880-b2dd982e8f9d', '7544aa92-2296-4b3b-aed4-5a47d4123446', 'abff7664-66be-4e5d-901b-ef409ea92005');
 insert into Wishlist (ID, Product_ID, Customer_ID) values ('4f964479-8784-4135-9187-e636eee549e2', 'aaea2fe7-8473-42a2-9ce7-cf9be0397505', 'ceed1ca5-dce0-4509-bf88-65fd68465cda');
 insert into Wishlist (ID, Product_ID, Customer_ID) values ('3290868b-11b2-4065-b4c0-1dad5469103d', '4a31202e-ed50-4a30-b0f9-04bf5f5a6bc0', '4e7d2f2b-b992-4702-9c2d-a3a982f7a195');
-insert into Wishlist (ID, Product_ID, Customer_ID) values ('6823a3dc-c6e6-44d7-b590-2647268d1b82', '6cb1feca-6ace-4203-9953-9c7cf85723c0', 'ce846cd6-2dcc-487a-bc09-e509e0dc4d86');
-insert into Wishlist (ID, Product_ID, Customer_ID) values ('1cbebeff-ce0c-47be-90ec-4fe144382bbc', '59f50ab8-4f27-426b-871f-09c0d72680b2', '7f238f61-4730-4c89-955f-8cfcfdab642e');
-insert into Wishlist (ID, Product_ID, Customer_ID) values ('27c0bd04-d036-4f27-b893-709396cadf56', '3fc30638-42b7-482d-9884-ac008c1f57b0', 'ae34943d-29e2-4c35-a6c3-e4e2bf7ea2b1');
-insert into Wishlist (ID, Product_ID, Customer_ID) values ('3323842e-21f5-4410-b878-d3159b9fc3c7', '3c5c2fe0-4325-49fe-85df-870eefee8301', '54fc19bd-2252-4572-82d4-83c8ac2d991d');
-insert into Wishlist (ID, Product_ID, Customer_ID) values ('05fc99f7-4bec-40d4-b216-1ef71e6999eb', 'a4529a07-0d0b-4f75-98b9-ea5de4121521', 'fdad06c4-463e-4385-9b95-d0726ae366ce');
-insert into Wishlist (ID, Product_ID, Customer_ID) values ('572da000-4fac-4902-8312-6e50c29884cd', '66fb7971-b09d-49fa-b1e4-fafaa2f0bec2', '81a7ff9a-3c5a-4b1d-955e-fcd43f354a6c');
 
 
 

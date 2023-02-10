@@ -39,11 +39,11 @@ CREATE TABLE Employee (
   -- Constraints
   CONSTRAINT Check_Emergency_Contact_Number CHECK (Emergency_Contact_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$'),
   -- CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$'),
-  CONSTRAINT Check_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
+  CONSTRAINT Check_Employee_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE Employee_Mobile_Numbers (
-  Employee_ID INT UNSIGNED NOT NULL,
+  Employee_ID VARCHAR(36),
   Mobile_Number VARCHAR(20) UNIQUE,
   PRIMARY KEY (Employee_ID, Mobile_Number),
   CONSTRAINT Check_Employee_Mobile_Number CHECK (Mobile_Number like '^[7-9][0-9]{9}$'),
@@ -61,10 +61,10 @@ CREATE TABLE Employee_Mobile_Numbers (
 --
 
 CREATE VIEW Employee_Details AS
-SELECT e.Employee_ID, CONCAT(e.First_Name, ' ', COALESCE(e.Middle_Name, ''), ' ', e.Last_Name) AS Name, e.Email, e.Date_of_Birth, e.Gender, e.Age, CONCAT(e.House_Number, ', ', e.Locality, ', ', e.City, ', ', e.State, ', ', e.Country, ', ', e.Pincode) AS Address, e.Employee_Role, e.Date_of_Hiring,e.Time_in_Company, e.PAN, e.Blood_Group, e.Emergency_Contact_Number, e.Emergency_Contact_Name, e.Salary, e.Last_update, m.Mobile_Number
+SELECT e.ID, CONCAT(e.First_Name, ' ', COALESCE(e.Middle_Name, ''), ' ', e.Last_Name) AS Name, e.Email, e.Date_of_Birth, e.Gender, CONCAT(e.House_Number, ', ', e.Locality, ', ', e.City, ', ', e.State_, ', ', e.Country, ', ', e.Pincode) AS Address, e.Employee_Role, e.Date_of_Hiring, e.PAN, e.Blood_Group, e.Emergency_Contact_Number, e.Emergency_Contact_Name, e.Salary, e.Last_update, m.Mobile_Number
 FROM Employee e
 JOIN Employee_Mobile_Numbers m
-ON e.Employee_ID = m.Employee_ID;
+ON e.ID = m.Employee_ID;
 
 
 --
@@ -87,17 +87,17 @@ CREATE TABLE Customer (
   State_ VARCHAR(15) NOT NULL,
   Country VARCHAR(15) NOT NULL,
   Pincode INT NOT NULL,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$'),
-  CONSTRAINT Check_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  -- CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$'),
+  CONSTRAINT Check_Customer_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE Customer_Mobile_Numbers (
-  Customer_ID INT UNSIGNED NOT NULL,
+  Customer_ID VARCHAR(36),
   Mobile_Number VARCHAR(20) UNIQUE,
   PRIMARY KEY (Customer_ID, Mobile_Number),
-  FOREIGN KEY (Customer_ID) REFERENCES Customer (Customer_ID) ON DELETE CASCADE,
+  FOREIGN KEY (Customer_ID) REFERENCES Customer (ID) ON DELETE CASCADE,
   CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number like '^[7-9][0-9]{9}$')
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -109,10 +109,10 @@ CREATE TABLE Customer_Mobile_Numbers (
 --
 
 CREATE VIEW Customer_Details AS
-SELECT c.Customer_ID, CONCAT(c.First_Name, ' ', COALESCE(c.Middle_Name, ''), ' ', c.Last_Name) AS Name, c.Email, c.Date_of_Birth, c.Gender, c.Age, CONCAT(c.House_Number, ', ', c.Locality, ', ', c.City, ', ', c.State, ', ', c.Country, ', ', c.Pincode) AS Address, c.Last_update, m.Mobile_Number
+SELECT c.ID, CONCAT(c.First_Name, ' ', COALESCE(c.Middle_Name, ''), ' ', c.Last_Name) AS Name, c.Email, c.Date_of_Birth, c.Gender, CONCAT(c.House_Number, ', ', c.Locality, ', ', c.City, ', ', c.State_, ', ', c.Country, ', ', c.Pincode) AS Address, c.Last_update, m.Mobile_Number
 FROM Customer c
 JOIN Customer_Mobile_Numbers m
-ON c.Customer_ID = c.Customer_ID;
+ON c.ID = m.Customer_ID;
  
 --
 -- Table structure for table `Seller`
@@ -133,15 +133,15 @@ CREATE TABLE Seller (
   State_ VARCHAR(15) NOT NULL,
   Country VARCHAR(15) NOT NULL,
   Pincode INT NOT NULL,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   -- CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number like '^([7-9][0-9]{9},)*[7-9][0-9]{9}$'),
-  CONSTRAINT Check_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
+  CONSTRAINT Check_Seller_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 CREATE TABLE Seller_Mobile_Numbers (
-  Seller_ID INT UNSIGNED NOT NULL,
+  Seller_ID VARCHAR(36),
   Mobile_Number VARCHAR(20) UNIQUE,
   PRIMARY KEY (Seller_ID, Mobile_Number),
   CONSTRAINT Check_Seller_Mobile_Number CHECK (Mobile_Number like '^[7-9][0-9]{9}$'),
@@ -338,9 +338,9 @@ CREATE INDEX idx_Category_Name ON Category (CategoryName);
 
 CREATE INDEX idx_Transaction_Date ON Customer_Transaction (Transaction_Date);
 
-CREATE INDEX idx_Customer_Order_Date ON Customer_Orders (Order_Date);
+CREATE INDEX idx_Customer_Order_Date ON Orders (Order_Date);
 
-CREATE INDEX idx_Order_Delivery_Date ON Customer_Orders (Delivery_Date);
+CREATE INDEX idx_Order_Delivery_Date ON Orders (Delivery_Date);
 
 CREATE INDEX idx_Order_Review_Rating ON Review (Review_Rating);
 

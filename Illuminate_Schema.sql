@@ -46,9 +46,9 @@ CREATE TABLE Employee (
 
 CREATE TABLE Employee_Mobile_Numbers (
   Employee_ID VARCHAR(36),
-  Mobile_Number BIGINT UNIQUE,
+  Mobile_Number BIGINT,
   PRIMARY KEY (Employee_ID, Mobile_Number),
-  CONSTRAINT Check_Employee_Mobile_Number CHECK (Mobile_Number >= 1100000000 AND Mobile_Number <= 9999999999),
+  -- CONSTRAINT Check_Employee_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999),
   FOREIGN KEY (Employee_ID) REFERENCES Employee (ID) ON DELETE CASCADE
   
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -96,10 +96,10 @@ CREATE TABLE Customer (
 
 CREATE TABLE Customer_Mobile_Numbers (
   Customer_ID VARCHAR(36),
-  Mobile_Number BIGINT UNIQUE,
+  Mobile_Number BIGINT,
   PRIMARY KEY (Customer_ID, Mobile_Number),
-  FOREIGN KEY (Customer_ID) REFERENCES Customer (ID) ON DELETE CASCADE,
-  CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number >= 1100000000 AND Mobile_Number <= 9999999999)
+  FOREIGN KEY (Customer_ID) REFERENCES Customer (ID) ON DELETE CASCADE
+  -- CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -135,7 +135,7 @@ CREATE TABLE Seller (
   Country VARCHAR(45) NOT NULL,
   Pincode VARCHAR(18) NOT NULL,
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number >= 1100000000 AND Mobile_Number <=9999999999),
+  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number <9999999999),
   CONSTRAINT Check_Seller_Email CHECK (`Email` REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$")
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -165,11 +165,11 @@ FROM Seller s;
 CREATE TABLE Product (
   ID VARCHAR(36) PRIMARY KEY ,
   Product_Name VARCHAR(100) NOT NULL,
-  Product_Description VARCHAR(255) NOT NULL,
+  Product_Description TINYTEXT NOT NULL,
   Product_Price FLOAT NOT NULL,
   Product_Quantity INT NOT NULL,
-  Product_Images VARCHAR(150) NOT NULL,
-  Product_Ingredients VARCHAR(200) NOT NULL,
+  Product_Images TINYTEXT NOT NULL,
+  Product_Ingredients TINYTEXT NOT NULL,
   CATEGORY_ID VARCHAR(36),
   BRAND_ID VARCHAR(36),
   SELLER_ID VARCHAR(36),
@@ -188,7 +188,7 @@ CREATE TABLE Product (
 CREATE TABLE Category(
   ID VARCHAR(36) PRIMARY KEY,
   CategoryName VARCHAR(45) NOT NULL,
-  CategoryDescription VARCHAR(255) NOT NULL,
+  CategoryDescription TINYTEXT NOT NULL,
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -201,7 +201,7 @@ CREATE TABLE Review (
   ID VARCHAR(36) PRIMARY KEY,
   Review_Rating INT NOT NULL,
   Review_Title VARCHAR(100) NOT NULL,
-  Comments VARCHAR(255),
+  Comments TINYTEXT,
   Review_Date DATE NOT NULL,
   Product_ID VARCHAR(36),
   Customer_ID VARCHAR(36),
@@ -231,9 +231,9 @@ DELIMITER ;
 CREATE TABLE Brand (
   ID VARCHAR(36) PRIMARY KEY,
   Brand_Name VARCHAR(50) NOT NULL,
-  Brand_Description VARCHAR(255) NOT NULL,
-  Brand_Logo VARCHAR(200) NOT NULL UNIQUE,
-  Founder VARCHAR(50) NOT NULL,
+  Brand_Description TINYTEXT NOT NULL,
+  Brand_Logo TEXT(500) NOT NULL,
+  Founder VARCHAR(100) NOT NULL,
   Country_Of_Origin VARCHAR(50) NOT NULL,
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
@@ -291,8 +291,8 @@ CREATE TABLE Orders (
 
 CREATE TABLE Courier (
   Tracking_ID VARCHAR(36) PRIMARY KEY,
-  Courier_Name VARCHAR(50) NOT NULL,
-  Tracking_URL VARCHAR(255) NOT NULL,
+  Courier_Name VARCHAR(100) NOT NULL,
+  Tracking_URL VARCHAR(2040) NOT NULL,
   Order_ID VARCHAR(36),
   FOREIGN KEY (Order_ID) REFERENCES Orders(ID),
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

@@ -41,7 +41,7 @@ CREATE TABLE Employee (
   -- KEY idx_actor_last_name (last_name)
   -- Constraints
   CONSTRAINT Check_Emergency_Contact_Number CHECK (Emergency_Contact_Number >= 1100000000 AND Emergency_Contact_Number <= 9999999999),
-  CONSTRAINT Check_Employee_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
+  CONSTRAINT Check_Employee_Email CHECK (`Email` REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$")
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE Employee_Mobile_Numbers (
@@ -89,8 +89,8 @@ CREATE TABLE Customer (
   State_ VARCHAR(45) NOT NULL,
   Country VARCHAR(45) NOT NULL,
   Pincode VARCHAR(18) NOT NULL,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  -- CONSTRAINT Check_Customer_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT Check_Customer_Email CHECK (`Email` REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$")
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -135,8 +135,8 @@ CREATE TABLE Seller (
   Country VARCHAR(45) NOT NULL,
   Pincode VARCHAR(18) NOT NULL,
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number >= 1100000000 AND Mobile_Number <=9999999999)
-  -- CONSTRAINT Check_Seller_Email CHECK (Email like '^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9][a-zA-Z0-9._-]*\.[a-zA-Z]{2,4}$')
+  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number >= 1100000000 AND Mobile_Number <=9999999999),
+  CONSTRAINT Check_Seller_Email CHECK (`Email` REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$")
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -30,7 +30,8 @@ def generate_employee():
     employee_last_name = names.get_last_name()
     employee_email = fake.email()
     employee_login_password = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=10))
-    employee_mobile_number = fake.phone_number()
+    # employee_mobile_number = fake.phone_number()
+    employee_mobile_number = random.randint(7000000000,9999999999)
     employee_date_of_birth = fake.date_of_birth(minimum_age=18, maximum_age=80)
     employee_gender = random.choice(['Male', 'Female', 'Other'])
     employee_house_number = random.randint(1, 500)
@@ -43,10 +44,33 @@ def generate_employee():
     employee_date_of_hiring = fake.date_this_decade(before_today=True, after_today=False)
     employee_pan = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
     employee_blood_group = random.choice(['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-'])
-    employee_emergency_contact_number = fake.phone_number()
+    employee_emergency_contact_number = random.randint(7000000000,9999999999)
     employee_emergency_contact_name = names.get_full_name()
     employee_salary = random.randint(50000, 200000)
-    return (employee_id,employee_first_name, employee_middle_name, employee_last_name, employee_email, employee_login_password,employee_mobile_number,employee_date_of_birth,employee_gender,employee_house_number,employee_locality,employee_city,employee_state,employee_country,employee_pincode,employee_employee_role,employee_date_of_hiring,employee_pan,employee_blood_group,employee_emergency_contact_number,employee_emergency_contact_name,employee_salary)
+    return (
+        employee_id,
+        employee_first_name,
+        employee_middle_name,
+        employee_last_name,
+        employee_email,
+        employee_login_password,
+        employee_mobile_number,
+        employee_date_of_birth,
+        employee_gender,
+        employee_house_number,
+        employee_locality,
+        employee_city,
+        employee_state,
+        employee_country,
+        employee_pincode,
+        employee_employee_role,
+        employee_date_of_hiring,
+        employee_pan,
+        employee_blood_group,
+        employee_emergency_contact_number,
+        employee_emergency_contact_name,
+        employee_salary
+        )
     
 
 
@@ -60,7 +84,7 @@ def generate_customer():
     last_name = names.get_last_name()
     email = fake.email()
     login_password = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=10))
-    mobile_number = fake.phone_number()
+    mobile_number = random.randint(7000000000,9999999999)
     date_of_birth = fake.date_of_birth(minimum_age=18, maximum_age=80)
     gender = random.choice(['Male', 'Female', 'Other'])
     house_number = random.randint(1, 500)
@@ -83,7 +107,7 @@ def generate_seller():
     last_name = names.get_last_name()
     email = fake.email()
     login_password = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=10))
-    mobile_number = fake.phone_number()
+    mobile_number = random.randint(7000000000,9999999999)
     company_name = fake.company()
     property_number = random.randint(1, 500)
     locality = fake.street_name()
@@ -161,7 +185,7 @@ def generate_random_order():
     ids['order_id'].append(order_id)
     order_date = fake.date()
     amount = round(random.uniform(100, 100000), 2)
-    order_status = random.choice([ 'Delivered', 'Under Process'])
+    order_status = random.choice([ '"Delivered"', '"Under Process"'])
     delivery_date = fake.date()
     delivery_fee = round(random.uniform(10, 500), 2)
     customer_id = random.choice(ids['customer_id'])
@@ -179,8 +203,8 @@ def generate_random_transaction():
     transaction_id = uuid.uuid4()
     ids['customer_transaction_id'].append(transaction_id)
     amount = round(random.uniform(100, 100000), 2)
-    transaction_status = random.choice([ 'Successful', 'Failed','Pending'])
-    payment_method = random.choice(['Credit/Debit Card', 'Netbanking', 'UPI', 'Cash On Delivery', 'Pay Later'])
+    transaction_status = random.choice([ '"Successful"', '"Failed"','"Pending"'])
+    payment_method = random.choice(['"Credit/Debit Card"', '"Netbanking"', '"UPI"', '"Cash On Delivery"', '"Pay Later"'])
     order_id = random.choice(ids['order_id'])
     ids["order_id"].remove(order_id)
     return (transaction_id, amount, transaction_status, payment_method, order_id)
@@ -201,7 +225,7 @@ def generate_data():
     'courier': (100,generate_random_courier),
     'transaction': (100,generate_random_transaction)
     }
-    with open('data.csv', 'w') as f:
+    with open('data.txt', 'w') as f:
         for k,v in num.items():
             rep, func = v
             f.write(k + '\n')

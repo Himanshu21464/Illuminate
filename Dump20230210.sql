@@ -27,13 +27,12 @@ DROP TABLE IF EXISTS `Brand`;
 CREATE TABLE `Brand` (
   `ID` varchar(36) NOT NULL,
   `Brand_Name` varchar(50) NOT NULL,
-  `Brand_Description` varchar(255) NOT NULL,
-  `Brand_Logo` varchar(200) NOT NULL,
-  `Founder` varchar(50) NOT NULL,
+  `Brand_Description` tinytext NOT NULL,
+  `Brand_Logo` text NOT NULL,
+  `Founder` varchar(100) NOT NULL,
   `Country_Of_Origin` varchar(50) NOT NULL,
   `Last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
-  UNIQUE KEY `Brand_Logo` (`Brand_Logo`),
   KEY `idx_Brand_Name` (`Brand_Name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -70,7 +69,7 @@ DROP TABLE IF EXISTS `Category`;
 CREATE TABLE `Category` (
   `ID` varchar(36) NOT NULL,
   `CategoryName` varchar(45) NOT NULL,
-  `CategoryDescription` varchar(255) NOT NULL,
+  `CategoryDescription` tinytext NOT NULL,
   `Last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   KEY `idx_Category_Name` (`CategoryName`)
@@ -86,8 +85,8 @@ DROP TABLE IF EXISTS `Courier`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Courier` (
   `Tracking_ID` varchar(36) NOT NULL,
-  `Courier_Name` varchar(50) NOT NULL,
-  `Tracking_URL` varchar(255) NOT NULL,
+  `Courier_Name` varchar(100) NOT NULL,
+  `Tracking_URL` varchar(2040) NOT NULL,
   `Order_ID` varchar(36) DEFAULT NULL,
   `Last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`Tracking_ID`),
@@ -161,9 +160,7 @@ CREATE TABLE `Customer_Mobile_Numbers` (
   `Customer_ID` varchar(36) NOT NULL,
   `Mobile_Number` bigint NOT NULL,
   PRIMARY KEY (`Customer_ID`,`Mobile_Number`),
-  UNIQUE KEY `Mobile_Number` (`Mobile_Number`),
-  CONSTRAINT `Customer_Mobile_Numbers_ibfk_1` FOREIGN KEY (`Customer_ID`) REFERENCES `Customer` (`ID`) ON DELETE CASCADE,
-  CONSTRAINT `Check_Customer_Mobile_Number` CHECK (((`Mobile_Number` >= 1100000000) and (`Mobile_Number` <= 9999999999)))
+  CONSTRAINT `Customer_Mobile_Numbers_ibfk_1` FOREIGN KEY (`Customer_ID`) REFERENCES `Customer` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -269,9 +266,7 @@ CREATE TABLE `Employee_Mobile_Numbers` (
   `Employee_ID` varchar(36) NOT NULL,
   `Mobile_Number` bigint NOT NULL,
   PRIMARY KEY (`Employee_ID`,`Mobile_Number`),
-  UNIQUE KEY `Mobile_Number` (`Mobile_Number`),
-  CONSTRAINT `Employee_Mobile_Numbers_ibfk_1` FOREIGN KEY (`Employee_ID`) REFERENCES `Employee` (`ID`) ON DELETE CASCADE,
-  CONSTRAINT `Check_Employee_Mobile_Number` CHECK (((`Mobile_Number` >= 1100000000) and (`Mobile_Number` <= 9999999999)))
+  CONSTRAINT `Employee_Mobile_Numbers_ibfk_1` FOREIGN KEY (`Employee_ID`) REFERENCES `Employee` (`ID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -309,11 +304,11 @@ DROP TABLE IF EXISTS `Product`;
 CREATE TABLE `Product` (
   `ID` varchar(36) NOT NULL,
   `Product_Name` varchar(100) NOT NULL,
-  `Product_Description` varchar(255) NOT NULL,
+  `Product_Description` tinytext NOT NULL,
   `Product_Price` float NOT NULL,
   `Product_Quantity` int NOT NULL,
-  `Product_Images` varchar(150) NOT NULL,
-  `Product_Ingredients` varchar(200) NOT NULL,
+  `Product_Images` tinytext NOT NULL,
+  `Product_Ingredients` tinytext NOT NULL,
   `CATEGORY_ID` varchar(36) DEFAULT NULL,
   `BRAND_ID` varchar(36) DEFAULT NULL,
   `SELLER_ID` varchar(36) DEFAULT NULL,
@@ -339,7 +334,7 @@ CREATE TABLE `Review` (
   `ID` varchar(36) NOT NULL,
   `Review_Rating` int NOT NULL,
   `Review_Title` varchar(100) NOT NULL,
-  `Comments` varchar(255) DEFAULT NULL,
+  `Comments` tinytext,
   `Review_Date` date NOT NULL,
   `Product_ID` varchar(36) DEFAULT NULL,
   `Customer_ID` varchar(36) DEFAULT NULL,
@@ -395,7 +390,7 @@ CREATE TABLE `Seller` (
   `Last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `Email` (`Email`),
-  CONSTRAINT `Check_Mobile_Number` CHECK (((`Mobile_Number` >= 1100000000) and (`Mobile_Number` <= 9999999999))),
+  CONSTRAINT `Check_Mobile_Number` CHECK (((`Mobile_Number` > 1100000000) and (`Mobile_Number` < 9999999999))),
   CONSTRAINT `Check_Seller_Email` CHECK (regexp_like(`Email`,_utf8mb4'^[a-zA-Z0-9][a-zA-Z0-9.!#$%&\'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$'))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -508,4 +503,4 @@ CREATE TABLE `Wishlist` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-02-10 22:19:49
+-- Dump completed on 2023-02-10 23:49:08

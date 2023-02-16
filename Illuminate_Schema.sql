@@ -34,7 +34,7 @@ CREATE TABLE Employee (
   PAN VARCHAR(15) NOT NULL,
   -- Blood_Group VARCHAR(20) NOT NULL,
   Blood_Group ENUM("A+", "B+", "O+", "AB+", "A-", "B-", "O-", "AB-"),
-  Emergency_Contact_Number BIGINT NOT NULL,
+  Emergency_Contact_Number VARCHAR(20) NOT NULL,
   Emergency_Contact_Name VARCHAR(255) NOT NULL,
   Salary FLOAT NOT NULL,
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -48,7 +48,7 @@ CREATE TABLE Employee_Mobile_Numbers (
   Employee_ID VARCHAR(36),
   Mobile_Number BIGINT,
   PRIMARY KEY (Employee_ID, Mobile_Number),
-  -- CONSTRAINT Check_Employee_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999),
+  CONSTRAINT Check_Employee_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999),
   FOREIGN KEY (Employee_ID) REFERENCES Employee (ID) ON DELETE CASCADE
   
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -97,9 +97,9 @@ CREATE TABLE Customer (
 CREATE TABLE Customer_Mobile_Numbers (
   Customer_ID VARCHAR(36),
   Mobile_Number BIGINT,
-  PRIMARY KEY (Customer_ID, Mobile_Number),
-  FOREIGN KEY (Customer_ID) REFERENCES Customer (ID) ON DELETE CASCADE
-  -- CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999)
+  PRIMARY KEY (Mobile_Number),
+  FOREIGN KEY (Customer_ID) REFERENCES Customer (ID) ON DELETE CASCADE,
+  CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

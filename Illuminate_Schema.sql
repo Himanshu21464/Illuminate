@@ -40,6 +40,7 @@ CREATE TABLE Employee (
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   -- KEY idx_actor_last_name (last_name)
   -- Constraints
+  CONSTRAINT Check_Employee_Password_Length CHECK (LENGTH(Login_Password) >=6),
   CONSTRAINT Check_Emergency_Contact_Number CHECK (Emergency_Contact_Number >= 1100000000 AND Emergency_Contact_Number <= 9999999999),
   CONSTRAINT Check_Employee_Email CHECK (`Email` REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$")
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -48,7 +49,7 @@ CREATE TABLE Employee_Mobile_Numbers (
   Employee_ID VARCHAR(36),
   Mobile_Number BIGINT,
   PRIMARY KEY (Employee_ID, Mobile_Number),
-  CONSTRAINT Check_Employee_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999),
+  CONSTRAINT Check_Employee_Mobile_Number CHECK (Mobile_Number >= 1100000000 AND Mobile_Number <= 9999999999),
   FOREIGN KEY (Employee_ID) REFERENCES Employee (ID) ON DELETE CASCADE
   
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -90,6 +91,7 @@ CREATE TABLE Customer (
   Country VARCHAR(45) NOT NULL,
   Pincode VARCHAR(18) NOT NULL,
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT Check_Customer_Password_Length CHECK (LENGTH(Login_Password) >=6),
   CONSTRAINT Check_Customer_Email CHECK (`Email` REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$")
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -99,7 +101,7 @@ CREATE TABLE Customer_Mobile_Numbers (
   Mobile_Number BIGINT,
   PRIMARY KEY (Mobile_Number),
   FOREIGN KEY (Customer_ID) REFERENCES Customer (ID) ON DELETE CASCADE,
-  CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999)
+  CONSTRAINT Check_Customer_Mobile_Number CHECK (Mobile_Number >= 1100000000 AND Mobile_Number <= 9999999999)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -135,7 +137,8 @@ CREATE TABLE Seller (
   Country VARCHAR(45) NOT NULL,
   Pincode VARCHAR(18) NOT NULL,
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number <9999999999),
+  CONSTRAINT Check_Mobile_Number CHECK (Mobile_Number > 1100000000 AND Mobile_Number < 9999999999),
+  CONSTRAINT Check_Seller_Password_Length CHECK (LENGTH(Login_Password) >=6),
   CONSTRAINT Check_Seller_Email CHECK (`Email` REGEXP "^[a-zA-Z0-9][a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]*?[a-zA-Z0-9._-]?@[a-zA-Z0-9][a-zA-Z0-9._-]*?[a-zA-Z0-9]?\\.[a-zA-Z]{2,63}$")
   -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -169,7 +172,7 @@ CREATE TABLE Product (
   Product_Price FLOAT NOT NULL,
   Product_Quantity INT NOT NULL,
   Product_Images TINYTEXT NOT NULL,
-  Product_Ingredients TINYTEXT NOT NULL,
+  -- Product_Ingredients TINYTEXT NOT NULL,
   CATEGORY_ID VARCHAR(36),
   BRAND_ID VARCHAR(36),
   SELLER_ID VARCHAR(36),

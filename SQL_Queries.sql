@@ -89,6 +89,13 @@ ORDER BY avg_rating DESC;
 
 
 
+-- Queries to show Constraints
+
+SELECT * FROM information_schema.table_constraints WHERE constraint_type = 'PRIMARY KEY' AND table_name = 'Employee';
+
+SELECT * FROM information_schema.table_constraints WHERE constraint_type = 'FOREIGN KEY' AND table_name = 'Wishlist';
+
+
 
 
 

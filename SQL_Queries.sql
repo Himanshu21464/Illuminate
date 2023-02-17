@@ -97,8 +97,18 @@ SELECT * FROM information_schema.table_constraints WHERE constraint_type = 'FORE
 
 
 
+-- Nested query to get top 5 spending customers
 
-
+SELECT c.First_Name, `Money Spent`
+FROM Customer c
+JOIN (
+  SELECT o.Customer_ID, SUM(o.Amount) AS `Money Spent`
+  FROM Orders o
+  GROUP BY o.Customer_ID
+  ORDER BY `Money Spent` DESC
+  LIMIT 5
+) m
+ON c.ID = m.Customer_ID;
 
 
 

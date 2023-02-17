@@ -1,3 +1,5 @@
+-- SET SQL_SAFE_UPDATES = 0;
+
 -- Query 1 : Counting number of brands on website
 SELECT COUNT(*) FROM Brand;
 

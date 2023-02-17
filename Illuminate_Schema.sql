@@ -1,7 +1,7 @@
 -- SQL Script to create Database Schema for Illuminate
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=1;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
 DROP SCHEMA IF EXISTS Illuminate;
@@ -161,28 +161,6 @@ SELECT s.ID, CONCAT(s.First_Name, ' ', COALESCE(s.Middle_Name, ''), ' ', s.Last_
 FROM Seller s;
 
 
---
--- Table structure for table `Product`
---
-
-CREATE TABLE Product (
-  ID VARCHAR(36) PRIMARY KEY ,
-  Product_Name VARCHAR(100) NOT NULL,
-  Product_Description TINYTEXT NOT NULL,
-  Product_Price FLOAT NOT NULL,
-  Product_Quantity INT NOT NULL,
-  Product_Images TINYTEXT NOT NULL,
-  -- Product_Ingredients TINYTEXT NOT NULL,
-  CATEGORY_ID VARCHAR(36),
-  BRAND_ID VARCHAR(36),
-  SELLER_ID VARCHAR(36),
-  FOREIGN KEY (BRAND_ID) REFERENCES BRAND(ID),
-  FOREIGN KEY (CATEGORY_ID) REFERENCES CATEGORY(ID),
-  FOREIGN KEY (SELLER_ID) REFERENCES SELLER(ID),
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-  
- -- KEY idx_actor_last_name (last_name)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Table structure for table `Product Category`
@@ -195,6 +173,46 @@ CREATE TABLE Category(
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+--
+-- Table structure for table `Brand`
+--
+CREATE TABLE Brand (
+  ID VARCHAR(36) PRIMARY KEY,
+  Brand_Name VARCHAR(50) NOT NULL,
+  Brand_Description TINYTEXT NOT NULL,
+  Brand_Logo TEXT(500) NOT NULL,
+  Founder VARCHAR(100) NOT NULL,
+  Country_Of_Origin VARCHAR(50) NOT NULL,
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+ -- KEY idx_actor_last_name (last_name)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+--
+-- Table structure for table `Product`
+--
+
+
+CREATE TABLE Product (
+  ID VARCHAR(36) PRIMARY KEY ,
+  Product_Name VARCHAR(100) NOT NULL,
+  Product_Description TINYTEXT NOT NULL,
+  Product_Price FLOAT NOT NULL,
+  Product_Quantity INT NOT NULL,
+  Product_Images TINYTEXT NOT NULL,
+  -- Product_Ingredients TINYTEXT NOT NULL,
+  CATEGORY_ID VARCHAR(36),
+  BRAND_ID VARCHAR(36),
+  SELLER_ID VARCHAR(36),
+  FOREIGN KEY (BRAND_ID) REFERENCES Brand(ID),
+  FOREIGN KEY (CATEGORY_ID) REFERENCES Category(ID),
+  FOREIGN KEY (SELLER_ID) REFERENCES Seller(ID),
+  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  
+ -- KEY idx_actor_last_name (last_name)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 --
 -- Table structure for table `Review`
@@ -227,20 +245,6 @@ END$$
 DELIMITER ;
 
 
---
--- Table structure for table `Brand`
---
-
-CREATE TABLE Brand (
-  ID VARCHAR(36) PRIMARY KEY,
-  Brand_Name VARCHAR(50) NOT NULL,
-  Brand_Description TINYTEXT NOT NULL,
-  Brand_Logo TEXT(500) NOT NULL,
-  Founder VARCHAR(100) NOT NULL,
-  Country_Of_Origin VARCHAR(50) NOT NULL,
-  Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
- -- KEY idx_actor_last_name (last_name)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 --
 -- Table structure for table `Cart`
 --

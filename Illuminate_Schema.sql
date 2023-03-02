@@ -233,6 +233,10 @@ CREATE TABLE Review (
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+
+
+--  TRIGGER-1 to update the review date;
 DELIMITER $$
 
 CREATE TRIGGER tr_review_insert
@@ -317,10 +321,26 @@ CREATE TABLE Customer_Transaction (
   Transaction_Status ENUM ("Successful", "Pending", "Failed"),
   Payment_Method ENUM ("Credit/Debit Card", "Netbanking", "UPI", "Cash On Delivery", "Pay Later"), 
   Order_ID VARCHAR(36),
+  Customer_ID VARCHAR(36),
   FOREIGN KEY (Order_ID) REFERENCES Orders(ID),
+  FOREIGN KEY (Customer_ID) REFERENCES Customer(ID),
   Last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
  -- KEY idx_actor_last_name (last_name)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+-- TRIGGER-2 [Empty customer cart after order placed successfully]
+
+DELIMITER //
+CREATE TRIGGER empty_cart AFTER INSERT ON Customer_Transaction
+FOR EACH ROW
+BEGIN
+    IF NEW.Transaction_Status = 'Successful' THEN
+        DELETE FROM Cart WHERE Customer_ID = NEW.Customer_ID;
+    END IF;
+END //
+DELIMITER ;
+
 
 
 CREATE INDEX idx_Employee_First_name ON Employee (First_Name);
@@ -350,3 +370,5 @@ CREATE INDEX idx_Customer_Order_Date ON Orders (Order_Date);
 CREATE INDEX idx_Order_Delivery_Date ON Orders (Delivery_Date);
 
 CREATE INDEX idx_Order_Review_Rating ON Review (Review_Rating);
+
+

@@ -236,7 +236,7 @@ CREATE TABLE Review (
 
 
 
---  TRIGGER-1 to update the review date;   ///   Working fine for Sample test cases.
+--  TRIGGER-1 to update the review date;   ///   Working for Sample test cases.
 DELIMITER $$
 
 CREATE TRIGGER tr_review_insert
@@ -329,7 +329,23 @@ CREATE TABLE Customer_Transaction (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- TRIGGER-2 [Empty customer cart after placing order]   ///   Working fine for Sample test cases.
+
+-- TRIGGER-2 To Reduce Product_Quantity after Transaction (Successful)      /// Working for sample test cases.
+DELIMITER //
+
+CREATE TRIGGER reduce_product_quantity
+AFTER INSERT ON Customer_Transaction
+FOR EACH ROW
+BEGIN
+    IF NEW.Transaction_Status = 'Successful' THEN
+        UPDATE Product SET Product_Quantity = Product_Quantity - (SELECT Quantity FROM Cart WHERE ID = NEW.ID) WHERE ID = (SELECT Product_ID FROM Cart WHERE ID = NEW.ID);
+    END IF;
+END //
+
+DELIMITER ;
+
+
+-- TRIGGER-3 [Empty customer cart after placing order]   ///   Working for Sample test cases.
 
 DELIMITER //
 CREATE TRIGGER empty_cart AFTER INSERT ON Customer_Transaction
@@ -341,33 +357,6 @@ BEGIN
 END //
 DELIMITER ;
 
-
-
--- TRIGGER-3 To Decrease the product stock after successful order by customer      /// Not working properly 
-DELIMITER $$
-CREATE TRIGGER decrease_product_quantity
-AFTER INSERT ON Customer_Transaction
-FOR EACH ROW
-BEGIN
-    IF NEW.Transaction_Status = 'Successful' THEN
-        UPDATE Product
-        SET Quantity = Quantity - (
-            SELECT Quantity
-            FROM Cart
-            WHERE Customer_ID = NEW.Customer_ID
-            AND Cart.ID = NEW.Order_ID
-            AND Cart.Product_ID = Product.ID
-        )
-        WHERE EXISTS (
-            SELECT 1
-            FROM Cart
-            WHERE Customer_ID = NEW.Customer_ID
-            AND Cart.ID = NEW.Order_ID
-            AND Cart.Product_ID = Product.ID
-        );
-    END IF;
-END$$
-DELIMITER ;
 
 
 

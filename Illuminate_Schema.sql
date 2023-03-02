@@ -236,7 +236,7 @@ CREATE TABLE Review (
 
 
 
---  TRIGGER-1 to update the review date;
+--  TRIGGER-1 to update the review date;   ///   Working fine for Sample test cases.
 DELIMITER $$
 
 CREATE TRIGGER tr_review_insert
@@ -329,7 +329,7 @@ CREATE TABLE Customer_Transaction (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
--- TRIGGER-2 [Empty customer cart after order placed successfully]
+-- TRIGGER-2 [Empty customer cart after placing order]   ///   Working fine for Sample test cases.
 
 DELIMITER //
 CREATE TRIGGER empty_cart AFTER INSERT ON Customer_Transaction
@@ -343,8 +343,7 @@ DELIMITER ;
 
 
 
--- TRIGGER-3 To Decrease the product stock after successful order by customer
-
+-- TRIGGER-3 To Decrease the product stock after successful order by customer      /// Not working properly 
 DELIMITER $$
 CREATE TRIGGER decrease_product_quantity
 AFTER INSERT ON Customer_Transaction

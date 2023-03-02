@@ -343,6 +343,36 @@ DELIMITER ;
 
 
 
+-- TRIGGER-3 To Decrease the product stock after successful order by customer
+
+DELIMITER $$
+CREATE TRIGGER decrease_product_quantity
+AFTER INSERT ON Customer_Transaction
+FOR EACH ROW
+BEGIN
+    IF NEW.Transaction_Status = 'Successful' THEN
+        UPDATE Product
+        SET Quantity = Quantity - (
+            SELECT Quantity
+            FROM Cart
+            WHERE Customer_ID = NEW.Customer_ID
+            AND Cart.ID = NEW.Order_ID
+            AND Cart.Product_ID = Product.ID
+        )
+        WHERE EXISTS (
+            SELECT 1
+            FROM Cart
+            WHERE Customer_ID = NEW.Customer_ID
+            AND Cart.ID = NEW.Order_ID
+            AND Cart.Product_ID = Product.ID
+        );
+    END IF;
+END$$
+DELIMITER ;
+
+
+
+
 CREATE INDEX idx_Employee_First_name ON Employee (First_Name);
 CREATE INDEX idx_Employee_Last_name ON Employee (Last_Name);
 CREATE INDEX idx_Employee_Salary ON Employee (Salary);

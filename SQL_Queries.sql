@@ -4,14 +4,14 @@
 SELECT COUNT(*) FROM Brand;
 
 -- Query 2: Updating quantity of a product on website and adding a constraint to make sure its positive
+-- ALTER TABLE Product ADD CONSTRAINT Stock CHECK (Product_Quantity >= 0);    
 UPDATE Product
 SET Product_Quantity = 100
-WHERE ID = 'acc3bdc8-a9b7-4f5e-949a-2589bfd062fb';
-ALTER TABLE Product ADD CONSTRAINT Stock CHECK (Product_Quantity >= 0);
+WHERE ID = 56;
 
 -- Query 3 : Fetch avg ratings of a product
 
-SELECT AVG(Review_Rating) FROM Review WHERE Product_ID = 'ae298b50-bf90-4766-b75e-6ad7a54cf02e';
+SELECT AVG(Review_Rating) FROM Review WHERE Product_ID = 2;
 
 -- Query 4 : Filter feature for sorting, price highest to lowest
 
@@ -44,24 +44,25 @@ HAVING COUNT(DISTINCT DATE_FORMAT(Orders.Order_Date, '%Y%m')) = 3;
 -- Query 8: Placing an order
 
 -- Get the sum of the items in the cart for a particular customer
-INSERT INTO Orders (Customer_ID, Order_Date, Amount)
-SELECT Customer_ID, CURRENT_DATE(), SUM(Quantity * Product_Price)
+
+INSERT INTO Orders (Customer_ID, Order_Date, Amount,Order_Status,Delivery_Date,Delivery_Fee)
+SELECT Customer_ID, CURRENT_DATE(), SUM(Quantity * Product_Price),'Under Process',DATE_ADD(CURRENT_DATE(), INTERVAL 3 DAY), FLOOR(RAND() * 100)
 FROM Cart
 JOIN Product ON Cart.Product_ID = Product.ID
-WHERE Customer_ID = 'd9b1bd85-fbb7-4a6c-b013-ea399107e057'
+WHERE Customer_ID = 20
 GROUP BY Customer_ID;
 
 -- Insert a new transaction record with the latest order details for a particular customer
 INSERT INTO Customer_Transaction (Order_ID, Transaction_Date, Amount)
 SELECT ID, CURRENT_DATE(), Amount
 FROM Orders
-WHERE Customer_ID = 'd9b1bd85-fbb7-4a6c-b013-ea399107e057'
+WHERE Customer_ID = 39
 ORDER BY Order_Date DESC
 LIMIT 1;
 
 -- Delete all items from the cart for a particular customer
 DELETE FROM Cart
-WHERE Customer_ID = 'd9b1bd85-fbb7-4a6c-b013-ea399107e057';
+WHERE Customer_ID = 24;
 
 
 
@@ -70,9 +71,9 @@ WHERE Customer_ID = 'd9b1bd85-fbb7-4a6c-b013-ea399107e057';
 INSERT INTO Cart (Customer_ID, Product_ID, Quantity)
 SELECT Customer_ID, Product_ID, 1
 FROM Wishlist
-WHERE Customer_ID = 'd9b1bd85-fbb7-4a6c-b013-ea399107e057' AND Product_ID = 'ae298b50-bf90-4766-b75e-6ad7a54cf02e' ;
+WHERE Customer_ID = 54 AND Product_ID = 12 ;
 DELETE FROM Wishlist
-WHERE Customer_ID = 'd9b1bd85-fbb7-4a6c-b013-ea399107e057' AND Product_ID = 'ae298b50-bf90-4766-b75e-6ad7a54cf02e';
+WHERE Customer_ID = 56 AND Product_ID = 87;
 
 -- Query 10: Sort products by avg ratings highest to lowest
 
@@ -93,7 +94,9 @@ ORDER BY avg_rating DESC;
 
 -- Queries to show Constraints
 
+
 SELECT * FROM information_schema.table_constraints WHERE constraint_type = 'PRIMARY KEY' AND table_name = 'Employee';
+
 
 SELECT * FROM information_schema.table_constraints WHERE constraint_type = 'FOREIGN KEY' AND table_name = 'Wishlist';
 

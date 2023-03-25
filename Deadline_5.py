@@ -318,6 +318,45 @@ def OLAPS_QUERY_4():
     cursor.close()
     connection.close()
 
+def OLAPS_QUERY_5():
+    import mysql.connector
+    from prettytable import PrettyTable
+
+    #Connecting to Database
+    connection = mysql.connector.connect(user='root',
+                                password='Himanshu@2022',
+                                host='localhost',
+                                database='Illuminate')
+    # Cursor object
+    cursor = connection.cursor()
+
+    # Query Execution
+    cursor.execute('''SELECT 
+                            YEAR(Date_of_Hiring) AS Year, 
+                            QUARTER(Date_of_Hiring) AS Quarter, 
+                            COUNT(*) AS Number_of_Employees 
+                        FROM 
+                            Employee 
+                        GROUP BY 
+                            YEAR(Date_of_Hiring), 
+                            QUARTER(Date_of_Hiring)
+                            WITH ROLLUP;
+
+                    ''')
+   
+    # Data Retrieval
+    Data_Retrieved = cursor.fetchall()
+
+    table= PrettyTable()
+    table.field_names = [desc[0] for desc in cursor.description]
+
+    for row in Data_Retrieved:
+        table.add_row(row)
+
+    print(table)
+    cursor.close()
+    connection.close()
+
 #------------------------------------------------------TRIGGERS-------------------------------------------------------
 def TRIGGERS_1():
     import mysql.connector
@@ -518,11 +557,12 @@ def OLAPS_QUERIES():
     print("| 2. Top 5 Employee roles with highest average salary group by Employee role and age     |")
     print("| 3. Number of Customer in each city group by city and age                               |")
     print("| 4. Age distribution of employees by blood group  (Pivot Table Query)                   |")
-    print("| 5. Return to main menu                                                                 |")
+    print("| 5. Employee hired Quarterly each year                                                  |")
+    print("| 6. Return to main menu                                                                 |")
     print("|----------------------------------------------------------------------------------------|\n")
 
     temp=0
-    while True and temp !=5:
+    while True and temp !=6:
         #print("|----------------------------------------------------------------------------------------|")
         option=int(input("Choose any of the above options: "))
         #print("|----------------------------------------------------------------------------------------|")
@@ -536,6 +576,8 @@ def OLAPS_QUERIES():
         elif option==4:
             OLAPS_QUERY_4()
         elif option==5:
+            OLAPS_QUERY_5()
+        elif option==6:
             MAIN_INTERFACE()
         else:
             print("Wrong option!! Please select the option you want:")
@@ -585,7 +627,7 @@ def MAIN_INTERFACE():
     print("|----------------------------------------------------------------------------|\n")
 
     temp=0
-    while True and temp !=3:
+    while True and temp !=4:
         #print("|----------------------------------------------------------------------------|")
         option=int(input("Choose any of the above options: "))
         #print("|----------------------------------------------------------------------------|")

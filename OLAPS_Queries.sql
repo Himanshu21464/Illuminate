@@ -20,7 +20,7 @@ DESC LIMIT 5;
 
 SELECT DISTINCT City, COUNT(*) AS Customer_Count 
 FROM Customer 
-GROUP BY City, Age WITH ROLLUP
+GROUP BY City, Age WITH ROLLUP     
 ORDER BY Customer_Count;
 
 
@@ -36,27 +36,23 @@ GROUP BY Blood_Group;
 
 
 
--- 5. Total Salary paid to employees by blood group
-SELECT Blood_Group, SUM(Salary) AS Total_Salary 
+-- 5. Top 5 products based on their rating in descending order
+    
+SELECT Category_ID, Product_Name, Product_Price, AVG(Review_Rating) AS Average_Rating 
+FROM Product , Review 
+WHERE Product.ID=Review.Product_ID
+GROUP BY Category_ID, Product_Price WITH ROLLUP
+ORDER BY Average_Rating DESC
+LIMIT 5;
+
+
+
+-- 6. Number of Employees hired each year
+    
+SELECT YEAR(Date_of_Hiring) AS Year, QUARTER(Date_of_Hiring) AS Quarter, COUNT(*) AS Number_of_Employees 
 FROM Employee 
-GROUP BY Blood_Group;
- 
-
--- 6. Average Salary paid to employees by blood group
-SELECT Blood_Group, AVG(Salary) AS Average_Salary
-FROM Employee
-GROUP BY Blood_Group;
+GROUP BY YEAR(Date_of_Hiring), QUARTER(Date_of_Hiring) WITH ROLLUP;
 
 
--- 7. Number of Employees hired each year
-SELECT YEAR(Date_of_Hiring) AS Year, COUNT(*) AS Number_of_Employees
-FROM Employee
-GROUP BY YEAR(Date_of_Hiring);
-
-
--- 8.  Total salary paid to male and female employees by their job role
-SELECT Employee_Role, Gender, SUM(Salary) AS Total_Salary
-FROM Employee
-GROUP BY Employee_Role, Gender;
 
 

@@ -83,7 +83,7 @@ CREATE TABLE Customer (
   Login_Password VARCHAR(20) NOT NULL,
   Date_of_Birth DATE NOT NULL,
   Gender ENUM('Male', 'Female','Other') NOT NULL,
-  Wallet Float NOT NULL DEFAULT = 1000,
+  Wallet Float NOT NULL DEFAULT 1000,
   Membership ENUM('Normal', 'Elite', 'Prime') NOT NULL, 
   Age INT NOT NULL DEFAULT 0,
   House_Number INT NOT NULL,
